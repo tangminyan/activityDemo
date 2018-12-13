@@ -36,7 +36,7 @@ public class DemoController {
     }
 
     @RequestMapping(value = "/approve/{taskId}/{decision}")
-    public String approveProcess(@PathVariable Long taskId, @PathVariable String decision) {
+    public String approveProcess(@PathVariable String taskId, @PathVariable String decision) {
         return demoService.approve(taskId, Boolean.parseBoolean(decision));
     }
 }

@@ -75,9 +75,9 @@ public class DemoServiceImpl implements DemoService {
     }
 
     @Override
-    public String approve(Long taskId, Boolean decision) {
+    public String approve(String taskId, Boolean decision) {
         if(decision) {
-            taskService.complete(taskId+"");
+            taskService.complete(taskId);
             return "审批通过，任务完成";
         } else {
             backTask();

@@ -3,12 +3,18 @@
   <process id="demoProcess" isClosed="false" isExecutable="true" name="Demo Process" processType="None">
     <startEvent id="startProcess" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="userProcess" name="User Process"/>
-    <userTask activiti:exclusive="true" id="approveProcess" name="Approve Process"/>
-    <sequenceFlow id="_6" sourceRef="startProcess" targetRef="userProcess"/>
-    <sequenceFlow id="_7" sourceRef="userProcess" targetRef="approveProcess"/>
-    <endEvent id="endProcess" name="EndEvent"/>
-    <sequenceFlow id="_3" name="back" sourceRef="approveProcess" targetRef="userProcess"/>
-    <sequenceFlow id="_4" name="agree" sourceRef="approveProcess" targetRef="endProcess"/>
+    <userTask activiti:assignee="#{decision}" activiti:exclusive="true" id="approveProcess" name="Approve Process"/>
+    <sequenceFlow id="_2" sourceRef="startProcess" targetRef="userProcess"/>
+    <sequenceFlow id="_3" sourceRef="userProcess" targetRef="approveProcess"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="decision" name="ExclusiveGateway"/>
+    <sequenceFlow id="_5" sourceRef="approveProcess" targetRef="decision"/>
+    <sequenceFlow id="_6" name="back" sourceRef="decision" targetRef="userProcess">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${decision == false}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="ended" name="EndEvent"/>
+    <sequenceFlow id="_8" name="approve" sourceRef="decision" targetRef="ended">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${decision == true}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
     <bpmndi:BPMNPlane bpmnElement="demoProcess">
@@ -30,37 +36,50 @@
           <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="endProcess" id="Shape-endProcess">
-        <dc:Bounds height="32.0" width="32.0" x="505.0" y="235.0"/>
+      <bpmndi:BPMNShape bpmnElement="decision" id="Shape-decision" isMarkerVisible="false">
+        <dc:Bounds height="32.0" width="32.0" x="345.0" y="165.0"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="approveProcess" targetElement="userProcess">
-        <di:waypoint x="362.5" y="230.0"/>
-        <di:waypoint x="275.0" y="195.0"/>
-        <di:waypoint x="177.5" y="230.0"/>
+      <bpmndi:BPMNShape bpmnElement="ended" id="Shape-ended">
+        <dc:Bounds height="32.0" width="32.0" x="450.0" y="165.0"/>
         <bpmndi:BPMNLabel>
-          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="approveProcess" targetElement="endProcess">
-        <di:waypoint x="405.0" y="257.5"/>
-        <di:waypoint x="505.0" y="251.0"/>
-        <bpmndi:BPMNLabel>
-          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="startProcess" targetElement="userProcess">
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_2" id="BPMNEdge__2" sourceElement="startProcess" targetElement="userProcess">
         <di:waypoint x="62.0" y="251.0"/>
         <di:waypoint x="135.0" y="257.5"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="userProcess" targetElement="approveProcess">
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="userProcess" targetElement="approveProcess">
         <di:waypoint x="220.0" y="257.5"/>
         <di:waypoint x="320.0" y="257.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="approveProcess" targetElement="decision">
+        <di:waypoint x="361.0" y="230.0"/>
+        <di:waypoint x="361.0" y="197.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="decision" targetElement="userProcess">
+        <di:waypoint x="356.0" y="170.0"/>
+        <di:waypoint x="175.0" y="170.0"/>
+        <di:waypoint x="175.0" y="230.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="decision" targetElement="ended">
+        <di:waypoint x="377.0" y="181.0"/>
+        <di:waypoint x="450.0" y="181.0"/>
         <bpmndi:BPMNLabel>
           <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>

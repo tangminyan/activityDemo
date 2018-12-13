@@ -11,5 +11,5 @@ public interface DemoService {
 
     void getTasks(Long personId);
 
-    String approve(Long taskId, Boolean decision);
+    String approve(String taskId, Boolean decision);
 }
