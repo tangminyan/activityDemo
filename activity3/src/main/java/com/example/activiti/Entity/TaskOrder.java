@@ -1,5 +1,6 @@
 package com.example.activiti.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ import javax.persistence.OneToOne;
 @Entity
 @Setter
 @Getter
-public class Task {
+public class TaskOrder {
     @Id
     @GeneratedValue
     private Long id;
@@ -29,4 +30,6 @@ public class Task {
     @OneToOne
     @JoinColumn(name = "approve_id")
     private Person approver;
+
+    private Integer status;
 }
