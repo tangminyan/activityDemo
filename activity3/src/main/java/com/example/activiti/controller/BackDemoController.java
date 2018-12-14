@@ -1,13 +1,9 @@
 package com.example.activiti.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.activiti.Entity.TaskOrder;
 import com.example.activiti.service.BackDemoService;
 import com.example.activiti.util.ControllerResponse;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,17 +16,29 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/workflow/back")
-@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
 public class BackDemoController {
 
     @Autowired
     private BackDemoService backDemoService;
 
+    /**
+     *
+     * @param personId 提交人员编号
+     * @param approveId 审批人员编号
+     * @param taskName  任务名称
+     * @return
+     */
     @RequestMapping(value = "/begin", method = RequestMethod.POST)
     public JSONObject getStart(@RequestParam Long personId, @RequestParam Long approveId, @RequestParam String taskName) {
         return ControllerResponse.createSuccessResponse(backDemoService.startFlow(personId, approveId, taskName));
     }
 
+    /**
+     *
+     * @param taskOrderId 任务id
+     * @param decision 审批结果
+     * @return
+     */
     @RequestMapping(value = "/decision", method = RequestMethod.POST)
     public JSONObject approve(@RequestParam Long taskOrderId, @RequestParam boolean decision) {
         try {
@@ -41,6 +49,11 @@ public class BackDemoController {
         }
     }
 
+    /**
+     *
+     * @param approveId 人员id
+     * @return
+     */
     @RequestMapping(value = "/getTaskList", method = RequestMethod.POST)
     public JSONObject getTaskList(@RequestParam Long approveId) {
         List<JSONObject> taskList = backDemoService.getTaskListByApprove(approveId);

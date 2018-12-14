@@ -29,5 +29,4 @@ public class Person {
     @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
 }
